@@ -1,31 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elysian Work</title>
-    <link rel="stylesheet" href="ww.css">
+  <meta charset="UTF-8" />
+  <title>Elysian Work</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #fff0f5;
+      display: flex;
+      justify-content: center;
+    }
+    body {
+  background-image: url('aura.jpg');
+  background-size: cover;
+}
+
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background-color: #f5b4db;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #d63384;
+    }
+
+    .month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    .month-header h2 {
+      margin: 0;
+      color: #d63384;
+      text-align: center;
+      flex: 1;
+    }
+
+    .nav-buttons {
+      width: 100px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .nav-buttons button {
+      background-color: #d63384;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .nav-buttons button:hover {
+      background-color: #ad2b6c;
+    }
+
+    #calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+
+    .day {
+      padding: 10px;
+      text-align: center;
+      background: #f8d7da;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .day:hover {
+      background-color: #f3acb8;
+    }
+
+    .has-task {
+      background-color: #ffc8dd;
+      font-weight: bold;
+    }
+
+    .selected {
+      outline: 2px solid #d63384;
+      background-color: #fcd5ce;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    input, button, select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #d63384;
+      flex: 1;
+    }
+
+    button[type="submit"] {
+      background-color: #d63384;
+      color: white;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #ad2b6c;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background: #ffe4ec;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      border-left: 5px solid #d63384;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: #8c8c8c;
+      background-color: #e2b5c5;
+      border-left-color: #6a994e;
+    }
+
+    .actions button {
+      margin-left: 5px;
+      background-color: transparent;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .actions button:hover {
+      color: #d63384;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Calendar Section -->
-        <div class="calendar">
-            <h2 id="monthName">Calendar</h2>
-            <div id="calendar"></div>
-            <button id="prevMonthBtn">Previous Month</button>
-            <button id="nextMonthBtn">Next Month</button>
-        </div>
+  <div class="container">
+    <h1>To-Do List</h1>
 
-        <!-- To-Do List Section -->
-        <div class="todo-list">
-            <h2>To-Do List</h2>
-            <input type="text" id="taskInput" placeholder="Add a task...">
-            <input type="date" id="taskDate">
-            <button id="addTaskBtn">Add Task</button>
-            <ul id="taskList"></ul>
-        </div>
+    <div class="month-header">
+      <div class="nav-buttons">
+        <button onclick="changeMonth(-1)">←</button>
+        <button onclick="changeMonth(1)">→</button>
+      </div>
+      <h2 id="monthTitle"></h2>
     </div>
 
-    <script src="ww.js"></script>
+    <div id="calendar"></div>
+
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="New task..." />
+      <input type="date" id="taskDate" />
+      <button type="submit">Add</button>
+    </form>
+
+    <h2>Tasks</h2>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskDate = document.getElementById("taskDate");
+    const taskList = document.getElementById("taskList");
+    const calendar = document.getElementById("calendar");
+    const monthTitle = document.getElementById("monthTitle");
+
+    let tasks = {};
+    let selectedDate = null;
+
+    const today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    function pad(n) {
+      return n < 10 ? '0' + n : n;
+    }
+
+    function formatDate(year, month, day) {
+      return `${year}-${pad(month + 1)}-${pad(day)}`;
+    }
+
+    function loadTasks() {
+      const saved = localStorage.getItem("calendarTasks");
+      if (saved) tasks = JSON.parse(saved);
+    }
+
+    function saveTasks() {
+      localStorage.setItem("calendarTasks", JSON.stringify(tasks));
+    }
+
+    function generateCalendar() {
+      calendar.innerHTML = "";
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      monthTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      for (let i = 0; i < firstDay; i++) {
+        calendar.appendChild(document.createElement("div"));
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const fullDate = formatDate(currentYear, currentMonth, day);
+        const dayEl = document.createElement("div");
+        dayEl.textContent = day;
+        dayEl.className = "day";
+
+        if (tasks[fullDate]?.length) {
+          dayEl.classList.add("has-task");
+        }
+
+        if (selectedDate === fullDate) {
+          dayEl.classList.add("selected");
+        }
+
+        dayEl.addEventListener("click", () => {
+          selectedDate = fullDate;
+          renderTasksForDate(fullDate);
+          generateCalendar();
+        });
+
+        calendar.appendChild(dayEl);
+      }
+    }
+
+    function renderTasksForDate(date) {
+      taskList.innerHTML = "";
+
+      const dayTasks = tasks[date] || [];
+
+      if (dayTasks.length === 0) {
+        taskList.innerHTML = "<li>No tasks for this date.</li>";
+        return;
+      }
+
+      dayTasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = task.completed ? "completed" : "";
+        li.innerHTML = `
+          <span>${task.text}</span>
+          <div class="actions">
+            <button onclick="toggleTask('${date}', ${index})">✓</button>
+            <button onclick="deleteTask('${date}', ${index})">🗑</button>
+          </div>
+        `;
+        taskList.appendChild(li);
+      });
+    }
+
+    function toggleTask(date, index) {
+      tasks[date][index].completed = !tasks[date][index].completed;
+      saveTasks();
+      renderTasksForDate(date);
+      generateCalendar();
+    }
+
+    function deleteTask(date, index) {
+      tasks[date].splice(index, 1);
+      if (tasks[date].length === 0) delete tasks[date];
+      saveTasks();
+      renderTasksForDate(date);
+      generateCalendar();
+    }
+
+    function changeMonth(offset) {
+      currentMonth += offset;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear -= 1;
+      } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear += 1;
+      }
+      selectedDate = null;
+      generateCalendar();
+      taskList.innerHTML = "";
+    }
+
+    document.getElementById("taskForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const text = taskInput.value.trim();
+      const date = taskDate.value;
+
+      if (text && date) {
+        if (!tasks[date]) tasks[date] = [];
+        tasks[date].push({ text, completed: false });
+
+        taskInput.value = "";
+        taskDate.value = "";
+
+        selectedDate = date;
+        saveTasks();
+        renderTasksForDate(date);
+        generateCalendar();
+      }
+    });
+
+    loadTasks();
+    generateCalendar();
+  </script>
 </body>
 </html>
