@@ -21,6 +21,6 @@ Features
 
 => Minimalistic Design: Simple, clean, and aesthetically pleasing.
 
-Stay On The Top Of Your Tasks Everyday......
-
 =>Responsive Layout: Works seamlessly on both desktop and mobile.
+
+Stay On The Top Of Your Tasks Everyday......
