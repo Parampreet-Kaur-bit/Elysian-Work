@@ -1,15 +1,13 @@
-name: Welcome to Elysian work
+name: CI Workflow
 
 on:
-  pull_request_target:
-    types: [opened]
-  issues:
-    types: [opened]
+  push:
+    branches:
+      - main
 
 jobs:
-  welcome:
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Greet the Elysian work contributor
         uses: actions/first-interaction@v1
@@ -27,4 +25,4 @@ jobs:
 
     steps:
       - name: Deploy application
-        run: echo "Deploying application..."
+        run: echo 'Deploying application...'
