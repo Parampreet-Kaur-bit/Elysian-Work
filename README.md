@@ -20,3 +20,7 @@ Features
 ⚡ Fast, lightweight, and intuitive — perfect for personal and professional use.
 
 => Minimalistic Design: Simple, clean, and aesthetically pleasing.
+
+=>Responsive Layout: Works seamlessly on both desktop and mobile.
+
+Stay On The Top Of Your Tasks Everyday......
