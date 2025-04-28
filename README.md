@@ -20,3 +20,5 @@ Features
 ⚡ Fast, lightweight, and intuitive — perfect for personal and professional use.
 
 => Minimalistic Design: Simple, clean, and aesthetically pleasing.
+
+Stay On The Top Of Your Tasks Everyday.....
