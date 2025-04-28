@@ -19,3 +19,4 @@ Features
 
 ⚡ Fast, lightweight, and intuitive — perfect for personal and professional use.
 
+=> Minimalistic Design: Simple, clean, and aesthetically pleasing.
