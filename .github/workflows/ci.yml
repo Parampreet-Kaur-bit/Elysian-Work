@@ -19,10 +19,6 @@ jobs:
             Welcome to **Elysian work**!
             Thank you for opening your first issue. Our team will review it soon.
             Stay tuned and feel free to contribute more!
-        pr-message: |
-          Yay! Your first pull request to **Elysian work**!
-          Thank you for your contribution.
-          We appericiate your effort and can't wait to review it.
       - name:  Dummy build step
         run: echo "Build step would go here"
 
