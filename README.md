@@ -23,4 +23,4 @@ Features
 
 Stay On The Top Of Your Tasks Everyday......
 
->>Responsive Layout: Works seamlessly on both desktop and mobile.
+>Responsive Layout: Works seamlessly on both desktop and mobile.
