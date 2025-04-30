@@ -1,6 +1,8 @@
 #Elysian-Work
 
+
 Elysian-Work[A To-Do List]
+
 
 Welcome to the Ultimate To-Do List Application — your personal assistant to conquer daily goals and supercharge productivity!
 Designed with simplicity and efficiency in mind, this app empowers you to organize tasks seamlessly and stay focused on what truly matters
@@ -20,5 +22,7 @@ Features
 ⚡ Fast, lightweight, and intuitive — perfect for personal and professional use.
 
 => Minimalistic Design: Simple, clean, and aesthetically pleasing.
+
+=>Responsive Layout: Works seamlessly on both desktop and mobile.
 
 Stay On The Top Of Your Tasks Everyday......
